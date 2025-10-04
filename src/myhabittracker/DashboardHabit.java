@@ -5,10 +5,13 @@
 package myhabittracker;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import java.awt.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.prefs.Preferences;
-import javax.swing.JOptionPane;
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+
 
 /**
  *
@@ -64,6 +67,8 @@ public class DashboardHabit extends javax.swing.JFrame {
         for (int i = 0; i < 6; i++) {
             columnNames[i + 1] = today.minusDays(i).format(formatter);
         }
+        
+  
 
         // Set custom model with Boolean checkboxes
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -81,7 +86,42 @@ public class DashboardHabit extends javax.swing.JFrame {
                 return types[columnIndex];
             }
         });
+        // table design
+        jTable1.setRowHeight(35);
+        jTable1.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        jTable1.setGridColor(new Color(70, 70, 70));
+        
+        jTable1.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
+        
+        // custom renderer: show ✔ / ✖
+        jTable1.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                JLabel cell = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                cell.setHorizontalAlignment(SwingConstants.CENTER);
+
+                if (value instanceof Boolean) {
+                    boolean done = (Boolean) value;
+                    cell.setText(done ? "✔" : "✖");
+                    cell.setForeground(done ? new Color(0, 200, 255) : Color.GRAY);
+                }
+                return cell;
+            }
+        });
+        
+               
+         // button design
+        addHabit.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        addHabit.setBackground(new Color(70, 130, 180));
+        addHabit.setForeground(Color.WHITE);
+
+        LockButton.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        LockButton.setBackground(new Color(200, 80, 80));
+        LockButton.setForeground(Color.WHITE);
+
+        fileMenu.setFont(new Font("Segoe UI", Font.PLAIN, 13));
     }
+    
 public javax.swing.JTable getTable() {
     return jTable1; // or whatever the JTable variable is named
 }
@@ -145,7 +185,9 @@ public javax.swing.JTable getTable() {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 621, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(90, 90, 90)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(addHabit)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
